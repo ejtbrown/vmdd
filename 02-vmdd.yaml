@@ -1,0 +1,14 @@
+network:
+  version: 2
+  renderer: networkd
+
+  bridges:
+    br-files:
+      mtu: 1500
+      dhcp4: no
+      dhcp6: no
+    br-hub:
+      mtu: 1500
+      dhcp4: no
+      dhcp6: no
+      addresses: [172.16.10.1/24]

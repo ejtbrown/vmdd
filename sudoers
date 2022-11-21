@@ -1,0 +1,8 @@
+%kvm ALL=(root) NOPASSWD: /usr/bin/systemctl stop smbd
+%kvm ALL=(root) NOPASSWD: /usr/bin/systemctl start smbd
+%kvm ALL=(root) NOPASSWD: /usr/bin/systemctl reload smbd
+%kvm ALL=(root) NOPASSWD: /usr/bin/shred /var/lib/libvirt/qemu/nvram/*
+%kvm ALL=(root) NOPASSWD: /usr/bin/shred -v /var/lib/libvirt/qemu/nvram/*
+%kvm ALL=(root) NOPASSWD: /usr/sbin/arp -d *
+%kvm ALL=(root) NOPASSWD: /usr/bin/shred -u /var/log/libvirt/qemu/*
+%kvm ALL=(root) NOPASSWD: /usr/bin/shred -uv /var/log/libvirt/qemu/*

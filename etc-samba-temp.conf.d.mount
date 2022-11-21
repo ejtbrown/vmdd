@@ -1,0 +1,13 @@
+[Unit]
+Description=Samba Temp Conf.d
+ConditionPathExists=/etc/samba/temp.conf.d
+Before=smbd.service
+
+[Mount]
+What=tmpfs
+Where=/etc/samba/temp.conf.d
+Type=tmpfs
+Options=size=20M,mode=0775,gid=sambashare
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,12 @@
+[Unit]
+Description=Ephemeral Images for KVM
+ConditionPathExists=/var/lib/libvirt/images.ephemeral
+
+[Mount]
+What=tmpfs
+Where=/var/lib/libvirt/images.ephemeral
+Type=tmpfs
+Options=mode=0775,uid=libvirt-qemu,gid=kvm
+
+[Install]
+WantedBy=multi-user.target
