@@ -44,13 +44,25 @@ distribution, but is known for sure to work on Ubuntu 22.04.
 
 Any guest operating system supported by the processor architecture of the host
 should work. That being said, operating systems with KVM guest tools and 
-drivers are probably the best choice. Linux and Windows guests are known to
-work, but others are likely to work as well. Note that while running MacOS
-guests is technologically feasible, it is a violation of Apple's license terms
-for that product (also note that this document in no way should be construed to
-contain legal advice; if you have questions about the legality of running MacOS
-as a guest on `vmdd`, speak to an appropriately licensed and certified 
-attorney).
+drivers are probably the best choice. 
+
+#### Linux Guests
+Most modern Linux distros come with KVM guest tools, making them an easy and
+obvious choice. The one notable nuisance limitation is that display scaling
+(in Gnome, at least) does not work well. To work around this, 
+[scale-enforce](https://github.com/ejtbrown/scale-enforce) can be used.
+
+#### Windows Guests
+Windows should install without issues on a KVM VM. It should be noted however
+that the desktop responsiveness is absolutely horrible until the KVM guest
+tools and drivers are installed. Once they are, these problems should go away.
+
+#### MacOS Guests
+While running MacOS guests is technologically feasible, it is a violation of 
+Apple's license terms for that product (also note that this document in no way 
+should be construed to contain legal advice; if you have questions about the 
+legality of running MacOS as a guest on `vmdd`, speak to an appropriately 
+licensed and certified attorney in your jurisdiction).
 
 ### The Right Way To Use `vmdd`
 The first cardinal rule of `vmdd` is that you never use the host operating 
