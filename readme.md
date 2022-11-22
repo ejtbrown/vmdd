@@ -122,6 +122,9 @@ the host filesystem to be selectively shared with specific VMs. In this way,
 files can be made available across various VMs with a great degree of granular
 control in access. See [hubshare.mb](hubshare.md) for more details.
 
+### Contributions
+Contributions are welcome. Please feel free to fork and submit pull requests!
+
 ### License & Warranty
 Licensed under GPL v3 (https://www.gnu.org/licenses/gpl-3.0.en.html)
 This software is provided as-is: no warranty is offered, expressed, or implied
