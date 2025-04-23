@@ -27,7 +27,10 @@ var_types = {
     'writable': bool,
     'browsable': bool,
     'printable': bool,
-    'guest ok': bool
+    'guest ok': bool,
+    'guest only': bool,
+    'public': bool,
+    'hosts allow': str
 }
 
 
@@ -200,6 +203,10 @@ class ShareVar(object):
     def set(self, val):
         global var_types
 
+        if val is None:
+            self.val = None
+            return
+
         if self.name in var_types.keys():
             if issubclass(type(val), var_types[self.name]):
                 self.val = val
@@ -216,6 +223,9 @@ class ShareVar(object):
     def __repr__(self):
         global var_types
 
+        if self.val is None:            
+            return "# " + self.name + ": not set"
+        
         r_val = '  ' + self.name + ' = '
         if self.name in var_types.keys():
             if issubclass(var_types[self.name], bool):
@@ -229,6 +239,9 @@ class ShareVar(object):
             r_val += str(self.val)
 
         return r_val
+    
+    def __str__(self):
+        return self.__repr__()
 
 
 class ShareDef(object):
@@ -239,8 +252,11 @@ class ShareDef(object):
                 ShareVar('path', ""),
                 ShareVar('read only', False),
                 ShareVar('guest ok', False),
+                ShareVar('guest only', False),
+                ShareVar('public', False),
                 ShareVar('browsable', True),
-                ShareVar('printable', False)
+                ShareVar('printable', False),
+                ShareVar('hosts allow')
             ]
         else:
             self.__params__ = list()

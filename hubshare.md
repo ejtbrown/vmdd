@@ -36,7 +36,7 @@ by VMs, such as software installation packages.
 
 ### Usage
 ```
-usage: hubshare [-h] [-r] [-g] [-p] [-t TIMEOUT] action [vm] [path] [name]
+usage: hubshare [-h] [-r] [-g] [-p] [-t TIMEOUT] [-a ALLOW] [-e] action [vm] [path] [name]
 
 positional arguments:
   action                add|remove|list|find|wait|delete|clean
@@ -51,7 +51,16 @@ options:
   -p, --permanent       Make the share permanent
   -t TIMEOUT, --timeout TIMEOUT
                         Timeout (in seconds) for wait action
+  -a ALLOW, --allow ALLOW
+                        Hosts or CIDR ranges permitted to access the share
+  -e, --private         Limit access down to only the target VM
 ```
+
+*Note on --private*
+The -e/--private flag sets the `hosts allow` parameter to the target VM's IP on the hubshare
+network. Since hubshares are already per-host configurations, it _shouldn't_ be possible for
+other hosts to access them, because Samba _shouldn't_ acknowledge that they exist to other
+hosts. The purpose of this flag is to add another layer of security
 
 Actions:
 - add: adds a new share to the specified VM

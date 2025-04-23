@@ -70,10 +70,10 @@ function add_hubshare {
 
       if grep -q 'shortcycle' <<< "${0}"; then
         echo "Adding temp hubshare ${share_name} (${share_path})"
-        hubshare add "${clone}" "${share_path}" "${share_name}"
+        hubshare -e -g add "${clone}" "${share_path}" "${share_name}"
       else
         echo "Adding permanent hubshare ${share_name} (${share_path})"
-        hubshare -p add "${clone}" "${share_path}" "${share_name}"
+        hubshare -p -e -g add "${clone}" "${share_path}" "${share_name}"
       fi
     done
   fi

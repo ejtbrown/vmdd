@@ -17,7 +17,6 @@ import sys
 import os
 import re
 import time
-import secrets
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -25,6 +24,8 @@ if __name__ == '__main__':
     parser.add_argument('-g', '--guest', action='store_true', help='Allow guest access')
     parser.add_argument('-p', '--permanent', action='store_true', help='Make the share permanent')
     parser.add_argument('-t', '--timeout', help='Timeout (in seconds) for wait action', default=60)
+    parser.add_argument('-a', '--allow', default=None, help='Hosts or CIDR ranges permitted to access the share')
+    parser.add_argument('-e', '--private', action='store_true', help='Limit access down to only the target VM')
     parser.add_argument('action', help='add|remove|list|find|wait|delete|clean')
     parser.add_argument('vm', nargs='?', default=None, help='VM name or IP')
     parser.add_argument('path', nargs='?', default=None, help='Host path to share')
@@ -71,7 +72,7 @@ if __name__ == '__main__':
 
     if args.action == 'list':
         hub_confs = list()
-        mfl = {'path': 4, 'name': 4, 'ip': 2, 'vm': 2, 'read_only': 8, 'guest_ok': 7}
+        mfl = {'path': 4, 'name': 4, 'ip': 2, 'vm': 2, 'read_only': 8, 'guest_ok': 7, 'hosts_allow': 10}
 
         for scope in ['perm', 'temp']:
             for conf_file in os.listdir('/etc/samba/' + scope + '.conf.d'):
@@ -94,7 +95,7 @@ if __name__ == '__main__':
             mfl[mx] += 1
             mfl_sum += mfl[mx]
 
-        output_fields = ['vm', 'ip', 'name', 'path', 'read_only', 'guest_ok']
+        output_fields = ['vm', 'ip', 'name', 'path', 'read_only', 'guest_ok', 'hosts_allow']
 
         # Output the shares
         for scope in ['perm', 'temp']:
@@ -107,7 +108,8 @@ if __name__ == '__main__':
             sys.stdout.write("IP".ljust(mfl['ip']) + " | ")
             sys.stdout.write("Name".ljust(mfl['name']) + " | ")
             sys.stdout.write("Path".ljust(mfl['path']) + " | ")
-            sys.stdout.write("Read Only | Guest OK\n")
+            sys.stdout.write("Read Only | Guest OK | ")
+            sys.stdout.write("Hosts Allow".ljust(mfl['hosts_allow']) + "\n")
             sys.stdout.write("-" * (mfl_sum + ((len(output_fields) - 1) * 3)))
             sys.stdout.write('\n')
 
@@ -120,7 +122,7 @@ if __name__ == '__main__':
                             else:
                                 sys.stdout.write(str(share[mx]).ljust(mfl[mx]))
 
-                            if mx == 'guest_ok':
+                            if mx == 'hosts_allow':
                                 sys.stdout.write('\n')
                             else:
                                 sys.stdout.write(' | ')
@@ -146,6 +148,21 @@ if __name__ == '__main__':
 
         if args.guest:
             share['guest_ok'] = True
+            share['guest_only'] = True
+            share['public'] = True
+
+        if args.private:
+            vms = hubsharelib.vm_find()
+            for ip in vms.keys():
+                if vms[ip]['name'] == args.vm:
+                    share['hosts_allow'] = ip
+                    break
+            
+            if share['hosts_allow'] is None:
+                sys.stderr.write("WARNING: private mode failed, unable to find IP for VM" + args.vm + "\n")
+        else:
+            if args.allow is not None:
+                share['hosts_allow'] = args.allow
 
         conf_file.save()
 
