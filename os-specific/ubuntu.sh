@@ -2,7 +2,7 @@
 
 # Install required packages
 apt-get update
-apt-get -y install qemu qemu-kvm libvirt-daemon libvirt-clients bridge-utils virt-manager tuned samba net-tools isc-dhcpd-server nmap
+apt-get -y install qemu qemu-kvm libvirt-daemon libvirt-clients bridge-utils virt-manager tuned samba net-tools isc-dhcpd-server nmap tuned
 
 # Remove packages that shouldn't be present
 for pkg in dnsmasq firefox; do
