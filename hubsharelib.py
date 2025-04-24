@@ -24,7 +24,7 @@ import io
 var_types = {
     'path': str,
     'read only': bool,
-    'writable': bool,
+    'writeable': bool,
     'browsable': bool,
     'printable': bool,
     'guest ok': bool,
@@ -251,12 +251,15 @@ class ShareDef(object):
             self.__params__ = [
                 ShareVar('path', ""),
                 ShareVar('read only', False),
+                ShareVar('writeable', True),
                 ShareVar('guest ok', False),
                 ShareVar('guest only', False),
-                ShareVar('public', False),
+                ShareVar('force user'),
                 ShareVar('browsable', True),
                 ShareVar('printable', False),
-                ShareVar('hosts allow')
+                ShareVar('hosts allow'),
+                ShareVar('create mask', '0664'),
+                ShareVar('directory mask', '0775')
             ]
         else:
             self.__params__ = list()

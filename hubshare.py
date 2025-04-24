@@ -145,11 +145,12 @@ if __name__ == '__main__':
         share = conf_file.add_share(args.name, path=args.path)
         if args.readonly:
             share['read_only'] = True
+            share['writeable'] = False
 
         if args.guest:
             share['guest_ok'] = True
             share['guest_only'] = True
-            share['public'] = True
+            share['force user'] = os.environ['USER']
 
         if args.private:
             vms = hubsharelib.vm_find()
